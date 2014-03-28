@@ -17,7 +17,7 @@ public class ModuleManager {
 			Module xx = clazz.getAnnotation(Module.class);
 			if(xx!=null){
 				modules.put(StringUtils.removeEnd(xx.name(),"/"),clazz);
-				System.out.print("loaded module "+clazz.getName());
+				System.out.println("loaded module "+clazz.getName());
 			}
 		}
 	}

@@ -15,8 +15,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.bc.dietary.web.ModelAndView;
 import org.bc.dietary.web.ModuleManager;
+import org.bc.sdak.GException;
 import org.bc.sdak.utils.LogUtil;
 
 
@@ -55,13 +57,18 @@ public class GrandServlet extends HttpServlet{
 					rd.forward(req, resp);
 				}
 			}
-		}catch(Exception ex){
-			resp.getWriter().println(ex);
-			for(StackTraceElement stack : ex.getStackTrace()){
-				resp.getWriter().println(stack);
+		}catch(GException ex){
+			String msg = ex.getMessage();
+			if(StringUtils.isEmpty(msg)){
+				msg = ex.getStackTrace()[0].toString();
 			}
+			resp.getWriter().println(msg);
+		}catch(Exception ex){
+			ex.printStackTrace(resp.getWriter());
 			//go to error page 
 			LogUtil.log(Level.SEVERE,"internal server error",ex);
+		}finally{
+			
 		}
 	}
 

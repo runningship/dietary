@@ -16,6 +16,7 @@ import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
 
+import javax.persistence.Column;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
@@ -106,6 +107,12 @@ public class ServletHelper {
 	private static void setValue(Object obj, Map<String, Object> data) {
 		
 		for(Field f : obj.getClass().getDeclaredFields()){
+			if(!data.containsKey(f.getName())){
+				Column column = f.getAnnotation(Column.class);
+				if(column!=null && column.nullable()==false){
+					throw new GException(DietaryExceptionType.ParameterMissingError,f.getName() + " is required");
+				}
+			}
 			f.setAccessible(true);
 			try {
 				f.set(obj, data.get(f.getName()));
@@ -126,7 +133,7 @@ public class ServletHelper {
 					return (ModelAndView) result;
 				}
 			}
-			throw new GException(DietaryExceptionType.MethodReturnTypeError,manager.getClass().getName()+"."+method+" does not return a ModelAndView");
+			throw new GException(DietaryExceptionType.MethodReturnTypeError,manager.getClass().getName()+"."+method+" not found");
 		} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 			throw new GException(DietaryExceptionType.ModuleInvokeError, "",ex);
 		}
@@ -150,6 +157,7 @@ public class ServletHelper {
 		if(StringUtils.isEmpty(path)){
 			return "";
 		}
+		path = StringUtils.substringBefore(path, "?");
 		path = StringUtils.removeEnd(path, "/");
 		return path.substring(path.lastIndexOf("/")+1);
 	}
