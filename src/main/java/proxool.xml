@@ -7,7 +7,7 @@
     <driver-class>com.mysql.jdbc.Driver</driver-class>  
     <driver-properties>  
         <property name="user" value="root"/>  
-        <property name="password" value=""/>  
+        <property name="password" value="admin"/>  
     </driver-properties>  
     <house-keeping-test-sql>select CURRENT_DATE</house-keeping-test-sql> 　　  
     <house-keeping-sleep-time>90000</house-keeping-sleep-time> 　　  

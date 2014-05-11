@@ -20,7 +20,7 @@
 	</servlet>
 	<servlet-mapping>
 	    <servlet-name>grand</servlet-name>
-	    <url-pattern>/*</url-pattern>
+	    <url-pattern>/pub/*</url-pattern>
 	</servlet-mapping>
 	
 	

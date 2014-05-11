@@ -8,7 +8,7 @@ public class ModuleTest {
 	@Test
 	public void testModuleManager(){
 		ModuleManager.add("org.bc.dietary");
-		ModuleManager.getModuleInstance(null);
+		ModuleManager.getHandler(null);
 	}
 	
 }

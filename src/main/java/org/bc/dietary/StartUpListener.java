@@ -26,7 +26,7 @@ public class StartUpListener implements ServletContextListener{
 		ModuleManager.add("org.bc.dietary");
 	}
 
-	private void initDataSource(){
+	public static void initDataSource(){
 		Map<String,String> settings = new HashMap<String , String>();
 //		settings.put(AvailableSettings.URL, "jdbc:mysql://localhost:3306/ihouse?characterEncoding=utf-8");
 //		settings.put(AvailableSettings.USER, "root");

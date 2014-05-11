@@ -86,7 +86,11 @@ public class ServletHelper {
         			}
         			obj = String.valueOf(obj).charAt(0);
         		}else if("java.lang.String".equals(typeName)){
-        			obj = String.valueOf(obj);
+        			if(obj==null){
+        				obj="";
+        			}else{
+        				obj = String.valueOf(obj);
+        			}
         		}else{
 					obj = Class.forName(pTypes[i].getName()).newInstance();
 					setValue(obj,data);
@@ -115,14 +119,25 @@ public class ServletHelper {
 			}
 			f.setAccessible(true);
 			try {
-				f.set(obj, data.get(f.getName()));
+				if("float".equals(f.getType().getName()) || "java.lang.Float".equals(f.getType().getName())){
+					Object tmp = data.get(f.getName());
+					try{
+						if(tmp!=null){
+							f.set(obj, Float.valueOf(String.valueOf(tmp)));
+						}
+					}catch(Exception ex){
+						throw new GException(DietaryExceptionType.ParameterMissingError,"无效的数据["+f.getName()+"="+tmp+"],必须是数字类型");
+					}
+				}else{
+					f.set(obj, data.get(f.getName()));
+				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				LogUtil.warning("set value for "+obj.getClass().getName()+"."+f.getName()+" failed.("+e.getMessage()+")");
 			}
 		}
 	}
 	
-	public static ModelAndView call(Object manager, String method , Object[] data) {
+	public static ModelAndView call(Object manager, String method , Object[] data) throws InvocationTargetException {
 		try {
 			for(Method m : manager.getClass().getDeclaredMethods()){
 				if(!m.getName().equals(method)){
@@ -134,7 +149,7 @@ public class ServletHelper {
 				}
 			}
 			throw new GException(DietaryExceptionType.MethodReturnTypeError,manager.getClass().getName()+"."+method+" not found");
-		} catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+		} catch (SecurityException | IllegalAccessException | IllegalArgumentException ex) {
 			throw new GException(DietaryExceptionType.ModuleInvokeError, "",ex);
 		}
 	}
@@ -150,15 +165,16 @@ public class ServletHelper {
 			return "";
 		}
 		path = StringUtils.removeEnd(path, "/");
-		return path.substring(0, path.lastIndexOf("/"));
+		return path;
+//		return path.substring(path.lastIndexOf("/"));
 	}
 	
-	public static String getMethod(String path){
-		if(StringUtils.isEmpty(path)){
-			return "";
-		}
-		path = StringUtils.substringBefore(path, "?");
-		path = StringUtils.removeEnd(path, "/");
-		return path.substring(path.lastIndexOf("/")+1);
-	}
+//	public static String getMethod(String path){
+//		if(StringUtils.isEmpty(path)){
+//			return "";
+//		}
+//		path = StringUtils.substringBefore(path, "?");
+//		//path = StringUtils.removeEnd(path, "/");
+//		return path.substring(path.lastIndexOf("/")+1);
+//	}
 }
