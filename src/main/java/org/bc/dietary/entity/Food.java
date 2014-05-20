@@ -29,7 +29,7 @@ public class Food {
 	/**
 	 * 1,0
 	 */
-	public char common;
+	public boolean common;
 	
 	public List<FoodNutrient> getNutrients(){
 		List<FoodNutrient> nutrients = SimpDaoTool.getGlobalCommonDaoService().listByParams(FoodNutrient.class, "from FoodNutrient where ndbNo=:ndbNo", 

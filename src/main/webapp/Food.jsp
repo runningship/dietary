@@ -38,7 +38,8 @@
 <div>
 <table align="center" width="1080px" cellspacing="0px">
 		<thead>
-			<td class="produce">名称</td>
+			<td class="produce">英文名称</td>
+			<td class="produce">中文名称</td>
 		</thead>
 		<%
 			java.util.List foods = (java.util.List)request.getAttribute("foods");
@@ -51,6 +52,8 @@
 		<tr>
 			<td><a target="_blank" href="nutrient/list?foodName=<%=getRequestValue(request, "food.name") %>">
 			<%=getRequestValue(request, "food.name") %></a></td>
+			<td><%=getRequestValue(request, "food.cname") %></td>
+			<td><a target="_blank" href="setCommon?ndbNo=<%=getRequestValue(request, "food.ndbNo") %>">设为常用</a></td>
 		</tr>
 		<% }%>
 	</table>

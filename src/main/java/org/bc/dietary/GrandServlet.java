@@ -63,7 +63,9 @@ public class GrandServlet extends HttpServlet{
 		try{
 			Object[] params = buildParamForMethod(manager,handler.getMethod(),req);
 			ModelAndView mv = ServletHelper.call(manager,handler.getMethod(),params);
-			if(mv.jsp==null){
+			if(mv.redirect!=null){
+				resp.sendRedirect(mv.redirect);
+			}else if(mv.jsp==null){
 				resp.getWriter().println(mv.data.toString());
 			}else{
 				ServletHelper.fillMV(req,mv);

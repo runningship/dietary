@@ -31,10 +31,32 @@ public class FoodManager {
 	
 	@WebMethod
 	public ModelAndView list(){
-		List<Food> foods = service.listByParams(Food.class, "from Food", null, null);
+		List<Food> foods = service.listByParams(Food.class, "from Food where common=0", null, null);
 		ModelAndView mv = new ModelAndView();
 		mv.data.put("foods", foods);
 		mv.jsp="/Food.jsp";
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView listCommon(){
+		List<Food> foods = service.listByParams(Food.class, "from Food where common=1", null, null);
+		ModelAndView mv = new ModelAndView();
+		mv.data.put("foods", foods);
+		mv.jsp="/Food.jsp";
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView setCommon(int ndbNo){
+		Food food = service.get(Food.class, ndbNo);
+		ModelAndView mv = new ModelAndView();
+		if(food!=null){
+			food.common=true;
+			service.saveOrUpdate(food);
+		}
+//		mv.redirect="list";
+		mv.data.put("msg", "set common successfully");
 		return mv;
 	}
 }
